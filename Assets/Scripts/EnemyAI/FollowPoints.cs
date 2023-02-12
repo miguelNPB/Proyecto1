@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FollowPoints : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class FollowPoints : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private bool _cicle;
     private Rigidbody2D _enemyRigidbody;
+    private NavMeshAgent _navMeshAgent;
     private int i;
     private bool forward;
     
@@ -19,15 +21,10 @@ public class FollowPoints : MonoBehaviour
             {
                 if (Vector2.Distance(_enemyRigidbody.position, _points[i].position) > 0.1f)
                 {
-                    Vector2 desiredPoint = Vector2.MoveTowards(_enemyRigidbody.position, _points[i].position, _speed * Time.deltaTime);
-                    _enemyRigidbody.MovePosition(desiredPoint);
+                    _navMeshAgent.SetDestination(_points[i].position);
                 }
                 else
-                    i++;
-            }
-            else
-            {
-                i = 0;
+                    i = (i + 1) % _points.Length;
             }
         }
         else
@@ -36,8 +33,7 @@ public class FollowPoints : MonoBehaviour
             {
                 if (Vector2.Distance(_enemyRigidbody.position, _points[i].position) > 0.1f)
                 {
-                    Vector2 desiredPoint = Vector2.MoveTowards(_enemyRigidbody.position, _points[i].position, _speed * Time.deltaTime);
-                    _enemyRigidbody.MovePosition(desiredPoint);
+                    _navMeshAgent.SetDestination(_points[i].position);
                 }
                 else
                     i++;
@@ -46,8 +42,7 @@ public class FollowPoints : MonoBehaviour
             {
                 if (Vector2.Distance(_enemyRigidbody.position, _points[i].position) > 0.1f)
                 {
-                    Vector2 desiredPoint = Vector2.MoveTowards(_enemyRigidbody.position, _points[i].position, _speed * Time.deltaTime);
-                    _enemyRigidbody.MovePosition(desiredPoint);
+                    _navMeshAgent.SetDestination(_points[i].position);
                 }
                 else
                     i--;
@@ -62,6 +57,9 @@ public class FollowPoints : MonoBehaviour
     }
     void Start()
     {
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent.updateRotation = false;
+        _navMeshAgent.updateUpAxis = false;
         _enemyRigidbody = GetComponent<Rigidbody2D>();
         i = 0;
         forward = true;
