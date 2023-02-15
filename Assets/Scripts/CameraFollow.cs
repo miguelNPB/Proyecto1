@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Script que mueve la cámara de forma suave siguiendo al jugador
+// para cambiar la velocidad de seguimiento baja el valor de smoothspeed
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] Transform _player;
